@@ -1,4 +1,4 @@
-# Bank Sampah Digital
+# Bank Sampah Digital masyarakat
 
 Aplikasi Bank Sampah Digital berbasis web untuk mempermudah pengelolaan data bank sampah desa.
 
