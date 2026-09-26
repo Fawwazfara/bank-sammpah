@@ -56,3 +56,5 @@ Aplikasi Bank Sampah Digital berbasis web untuk mempermudah pengelolaan data ban
 ## Akun Login (Petugas)
 Email: `admin@banksampah.com`
 Password: `password`
+
+----------------terimakasih---------------
