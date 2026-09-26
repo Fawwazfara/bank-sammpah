@@ -1,6 +1,6 @@
 # Bank Sampah Digital masyarakat
 
-Aplikasi Bank Sampah Digital berbasis web untuk mempermudah pengelolaan data bank sampah desa.
+Aplikasi Bank Sampah Digital berbasis web untuk mempermudah pengelolaan data bank sampah desa sukahaji.
 
 ## Fitur
 1. **Dua Role**: Petugas (Admin) dan Warga (Nasabah).
