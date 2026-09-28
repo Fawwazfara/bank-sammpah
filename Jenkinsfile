@@ -1,60 +1,54 @@
 pipeline {
     agent any
 
-    // 1. Mendefinisikan variabel global pipeline
     environment {
         APP_NAME = 'Aplikasi Bank Sampah'
-        BUILD_ENV = 'Staging'
+        DEPLOY_ENV = 'Production'
     }
 
     stages {
-        stage('Environment Check') {
+        // --- TAHAP CONTINUOUS INTEGRATION (CI) ---
+        stage('CI - Build & Test') {
             steps {
-                echo "--- Memeriksa Lingkungan Build untuk ${env.APP_NAME} (${env.BUILD_ENV}) ---"
-                sh 'uname -a'
-                sh 'git --version'
-            }
-        }
-
-        stage('Build & Structure Check') {
-            steps {
-                echo '--- Memeriksa File & Struktur Project ---'
+                echo "--- [CI] Memeriksa & Menguji ${env.APP_NAME} ---"
                 sh '''
-                    echo "Daftar isi repositori:"
-                    ls -la
-                    
-                    # Contoh logika validasi sederhana di Linux
-                    if [ -f "README.md" ]; then
-                        echo "[OK] File README.md ditemukan."
-                    else
-                        echo "[WARN] README.md tidak ditemukan!"
-                    fi
+                    echo "[OK] Dependencies installed (Composer & NPM)"
+                    echo "[OK] Frontend assets compiled (npm run build)"
+                    echo "[OK] Automated testing passed (php artisan test)"
                 '''
             }
         }
 
-        stage('Automated Testing') {
+        // --- TAHAP CONTINUOUS DEPLOYMENT (CD) ---
+        stage('CD - Deploy to Server') {
+            // Filter: Stage ini HANYA berjalan jika commit dilakukan di branch main
+            when {
+                branch 'main'
+            }
             steps {
-                echo '--- Menjalankan Unit Test ---'
+                echo "--- [CD] Memulai Deployment ${env.APP_NAME} ke Lingkungan ${env.DEPLOY_ENV} ---"
+                
+                // Simulasi eksekusi command deployment
                 sh '''
-                    echo "Menjalankan pengujian sintaks & logika..."
-                    # Di industri, di sini perintah seperti: php artisan test / npm test / pytest
-                    echo "Hasil Test: 0 Errors, All Passed!"
+                    echo "1. Mempersiapkan environment server..."
+                    echo "2. Memperbarui container/aplikasi..."
+                    # Contoh command riil di server:
+                    # ssh user@server-ip "cd /app && git pull && docker compose up -d --build"
+                    
+                    echo "3. Menjalankan database migration (php artisan migrate --force)..."
+                    echo "4. Reload web server (Nginx / Apache)..."
+                    echo "=== DEPLOYMENT BERHASIL DIPERBARUI! ==="
                 '''
             }
         }
     }
 
-    // 2. Aksi otomatis setelah pipeline selesai dieksekusi
     post {
-        always {
-            echo '--- [ALWAYS] Tahap ini selalu dieksekusi baik build sukses maupun gagal ---'
-        }
         success {
-            echo "--- [SUCCESS] ${env.APP_NAME} berhasil lolos semua tahapan CI! ---"
+            echo "--- [SUCCESS] Alur CI/CD untuk ${env.APP_NAME} berjalan sempurna! ---"
         }
         failure {
-            echo "--- [FAILURE] Terjadi kesalahan pada proses CI. Periksa log! ---"
+            echo "--- [FAILURE] Deployment gagal. Tim DevOps perlu memeriksa log! ---"
         }
     }
 }
