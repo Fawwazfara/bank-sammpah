@@ -24,6 +24,7 @@ pipeline {
             // Filter: Stage ini HANYA berjalan jika commit dilakukan di branch main
             when {
                 branch 'main'
+                branch 'master'
             }
             steps {
                 echo "--- [CD] Memulai Deployment ${env.APP_NAME} ke Lingkungan ${env.DEPLOY_ENV} ---"
