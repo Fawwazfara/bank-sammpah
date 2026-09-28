@@ -21,25 +21,13 @@ pipeline {
 
         // --- TAHAP CONTINUOUS DEPLOYMENT (CD) ---
         stage('CD - Deploy to Server') {
-            // Filter: Stage ini HANYA berjalan jika commit dilakukan di branch main
-            when {
-                anyOf {
-                    branch 'main'
-                    branch 'master'
-                }    
-            }
             steps {
                 echo "--- [CD] Memulai Deployment ${env.APP_NAME} ke Lingkungan ${env.DEPLOY_ENV} ---"
-                
-                // Simulasi eksekusi command deployment
                 sh '''
                     echo "1. Mempersiapkan environment server..."
                     echo "2. Memperbarui container/aplikasi..."
-                    # Contoh command riil di server:
-                    # ssh user@server-ip "cd /app && git pull && docker compose up -d --build"
-                    
                     echo "3. Menjalankan database migration (php artisan migrate --force)..."
-                    echo "4. Reload web server (Nginx / Apache)..."
+                    echo "4. Reload web server..."
                     echo "=== DEPLOYMENT BERHASIL DIPERBARUI! ==="
                 '''
             }
@@ -47,11 +35,14 @@ pipeline {
     }
 
     post {
+        always {
+            echo '--- [ALWAYS] Pipeline selesai dieksekusi ---'
+        }
         success {
             echo "--- [SUCCESS] Alur CI/CD untuk ${env.APP_NAME} berjalan sempurna! ---"
         }
         failure {
-            echo "--- [FAILURE] Deployment gagal. Tim DevOps perlu memeriksa log! ---"
+            echo "--- [FAILURE] Pipeline gagal. Periksa log! ---"
         }
     }
 }
